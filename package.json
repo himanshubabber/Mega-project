@@ -1,0 +1,16 @@
+{
+  "name": "mega-project",
+  "version": "1.0.0",
+  "description": "a backend for large social media platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mega",
+    "backend",
+    "javascript"
+  ],
+  "author": "Himanshu",
+  "license": "ISC"
+}
