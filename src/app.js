@@ -20,7 +20,21 @@
  app.use(cookieParser())
 
 
+      //  routes
+      // routes es tarah import kiya jata hn 
 
+      import userRouter from "./routes/user.routes.js"
+
+      // routes declaration 
+
+    //  app.use("/users",userRouter); not standard practice 
+
+      // url kese banaega 
+      // https://localhost:8000/users/register
+      // alag alag method banalo user.routes me 
+
+      // standard practice
+      app.use("/api/v1/users", userRouter );
 
 
 

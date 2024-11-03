@@ -12,8 +12,8 @@
       this.success= false,
       this.erros= errors
       
-      if(statck){
-        this.stack= statck
+      if(stack){
+        this.stack= stack
       }
       else{
         Error.capturestackTrace( this, this.constructor)

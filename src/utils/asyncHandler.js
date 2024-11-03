@@ -15,9 +15,10 @@
 
 
 // promises wala code 
+// high order function 
 const asyncHandler = (requestHandler)=>{
-  (req, res, next) =>{
-    promise.resolve(requestHandler(req, res, next))
+ return  (req, res, next) =>{
+    Promise.resolve(requestHandler(req, res, next))
     .catch(err =>next(err));
   }
 }
