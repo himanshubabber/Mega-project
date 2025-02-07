@@ -2,7 +2,7 @@
     constructor(
     statuscode,
     message= "something went wrong",
-    error= [],
+    errors= [],
     stack= " "
     ){
       super(message)

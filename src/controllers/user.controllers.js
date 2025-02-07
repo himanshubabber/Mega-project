@@ -25,27 +25,28 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
 
 
     //destructural of res.body
-    const {fullname, email, username, password}= req.body
+    const {user_name,fullname, email, password}= req.body
     console.log("email: ", email);
     
     //  if(fullname== "") {
     //   throw new ApiError(400, "fullname is required") 
     // }
 
-    if(
-       [fullname, email, username, password].some((field) => field?.trim() === "")
+   if(
+       [user_name,fullname, email, password].some((field) => field?.trim() === "")
     ){
        throw new ApiError(400, "All field are required")
     }
      
     //3)
-   const existedUser= User.findOne({
-      $or: [{ username}, {email}] // koi ek bhi match kare toh
+   const existedUser= await User.findOne({
+      $or: [{ user_name}, {email}] // koi ek bhi match kare toh
     })
  
     if(existedUser){
     throw new ApiError(409, "User with email or username already exit")
     }
+   // console.log(existedUser)
 
     //4)
       const avatarLocalPath = req.files?.avatar[0]?.path;
@@ -72,18 +73,18 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
       }
 
      //6)
-    const User= await  User.create({
-        fullname,
-        avatar: avatar.url, // cloudinary response me url dega
-        coverImage: coverImage?.url || "",
-        email,
-        password,
-        username : username.toLowerCase()
-      })
+     const newUser = await User.create({
+      fullname,
+      avatar: avatar.url,
+      coverImage: coverImage?.url || "",
+      email,
+      password,
+      user_name: user_name ? user_name.toLowerCase() : ""
+    });
+    
    //7)
-    const  createdUser = await  User.findById(User._id).select(
-      "-password -refreshToken"
-    ) // jo jo nhi chahiye
+   const createdUser = await User.findById(newUser._id).select("-password -refreshToken");
+   // jo jo nhi chahiye
     
     //8)
     if(!createdUser){
@@ -93,7 +94,7 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
     //9)
 
     return res.status(201).json(
-      new ApiResponse(200, careatedUser,"User registered Successfully")
+      new ApiResponse(200, createdUser,"User registered Successfully")
     )
 
 })

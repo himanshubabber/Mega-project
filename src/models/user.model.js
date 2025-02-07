@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 const userSchema = new Schema ( {
    
-  username: {
+  user_name: {
     type: String,
     required: true,
     unique: true,
@@ -22,7 +22,7 @@ const userSchema = new Schema ( {
     trim: true
   },
 
-  fullName: {
+  fullname: {
     type: String,
     required: true,
     trim: true,
