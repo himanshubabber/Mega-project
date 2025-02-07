@@ -31,6 +31,7 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
     //  if(fullname== "") {
     //   throw new ApiError(400, "fullname is required") 
     // }
+    console.log("Request Body:", req.body);
 
    if(
        [user_name,fullname, email, password].some((field) => field?.trim() === "")
