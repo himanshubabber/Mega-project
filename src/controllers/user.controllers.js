@@ -72,8 +72,8 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
       if(!avatar) {
         throw new ApiError(400, "Avatar file is required")
       }
-
-     //6)
+     console.log(avatar);
+       //6)
      const newUser = await User.create({
       fullname,
       avatar: avatar.url,
@@ -82,7 +82,7 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
       password,
       user_name: user_name ? user_name.toLowerCase() : ""
     });
-    
+    console.log(newUser)
    //7)
    const createdUser = await User.findById(newUser._id).select("-password -refreshToken");
    // jo jo nhi chahiye
