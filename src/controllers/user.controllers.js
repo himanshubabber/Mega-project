@@ -6,6 +6,27 @@ import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 
 
+  const generateAccessAndRefreshToken= async (userId) =>{
+    try {
+        const accessToken= User.generateAccessToken()
+        const refreshToken= User.generateRefreshToken() 
+
+      User.refreshToken=  refreshToken
+      await User.Save({validateBeforeSave: false})
+
+      return {accessToken , refreshToken}
+
+
+    } catch (error) {
+       
+      throw new ApiError(500, "something went wrong while generating the refresh and access token")
+    }
+
+  }
+
+
+
+
 const registerUser = asyncHandler(async (req, res) => {
   /*
 return res.status(200).json({ jaha pe send karna hn postman pe dekhega green color me
@@ -101,6 +122,58 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
 })
 
   
+const loginUser= asyncHandler( async (req,res)=> {
+  // pahele req.body se data lelo
+ const  {email, password, user_name} = req.body
+   
+ //validate the user 
+  if(!user_name || !email) {
+    throw new ApiError(400,"user_name or email is required ")
+  }
+  
+  // find the user 
+  const user = User.findOne({
+    $or: [{user_name , email}]
+  })
 
+  if(!user){
+    throw new ApiError(404, "User doesn't exit")
+  }
+
+  const isPasswordValid=User.isPasswordCorrect(password)
+
+  if(!isPasswordValid){
+    throw new ApiError(401,"Invalid user credentials")
+  }
+  
+  // generate refresh and access token 
+  const {accessToken , refreshToken} = await generateAccessAndRefreshToken(user._id)
+
+  const loggedInUser= await user.findById(user._id).
+  select("-password -refreshtoken")
+  
+   const options = {
+    httponly: true,
+    secure: true
+   }
+
+   return res.status(200).
+   cookie("accessToken",accessToken,options).
+   cookie("refreshToken",refreshToken,options)
+   .json(
+    new ApiResponse(
+      200,
+      {
+        user: loggedInUser, accessToken, refreshToken
+      },
+
+      "user logged in successfully"
+    )
+   )
+
+
+ }
+
+)
 
 export {registerUser}
