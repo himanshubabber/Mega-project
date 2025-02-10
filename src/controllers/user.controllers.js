@@ -1,7 +1,8 @@
-import {asyncHandler} from "../utils/asyncHandler.js"
+import { asyncHandler } from "../utils/asyncHandler.js";
 
+import jwt from "jsonwebtoken"
 import {ApiError} from "../utils/ApiError.js"
-import {User} from "../models/user.model.js"
+import {User} from "../models/user.models.js"
 import {uploadOnCloudinary} from "../utils/cloudinary.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 
@@ -125,9 +126,10 @@ return res.status(200).json({ jaha pe send karna hn postman pe dekhega green col
 const loginUser= asyncHandler( async (req,res)=> {
   // pahele req.body se data lelo
  const  {email, password, user_name} = req.body
-   
- //validate the user 
-  if(!user_name || !email) {
+ 
+
+
+  if(!(user_name || email)) {
     throw new ApiError(400,"user_name or email is required ")
   }
   
@@ -176,7 +178,7 @@ const loginUser= asyncHandler( async (req,res)=> {
 
 )
 
-const logOutUser =asyncHandler(async (req, res)=>{
+const logOutUser = asyncHandler(async (req, res)=>{
   await  User.findByIdAndUpdate(
     req.user._id,
     {
